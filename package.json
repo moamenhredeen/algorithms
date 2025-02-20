@@ -1,0 +1,27 @@
+{
+  "name": "algorithms",
+  "version": "1.0.0",
+  "description": "a place, where i practice algorithms, data structures and problem solving",
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moamenhredeen/algorithms.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moamenhredeen/algorithms/issues"
+  },
+  "homepage": "https://github.com/moamenhredeen/algorithms#readme",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.0.6",
+    "@vitest/ui": "^3.0.6",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.6"
+  }
+}
