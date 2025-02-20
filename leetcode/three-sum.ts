@@ -1,5 +1,3 @@
-import { assertEquals } from "jsr:@std/assert";
-
 /**
  * Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
  *
@@ -51,9 +49,6 @@ export function threeSum(nums: number[]): number[][] {
 				}
 			}
 			map.set(num, [num])
-
-			console.log(num, map);
-
     }
     return triplets;
 }

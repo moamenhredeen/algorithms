@@ -1,5 +1,3 @@
-import { assertEquals } from "jsr:@std/assert";
-
 /**
  * Two Sum
  * Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -33,7 +31,7 @@ import { assertEquals } from "jsr:@std/assert";
  * @returns indices of the two numbers such that they add up to target
  */
 export function twoSum(nums: number[], target: number): number[] {
-    let map = new Map<number, number>();
+    const map = new Map<number, number>();
     for (let i = 0; i < nums.length; i++) {
         if (map.has(nums[i])) {
             return [i, map.get(nums[i])!];
