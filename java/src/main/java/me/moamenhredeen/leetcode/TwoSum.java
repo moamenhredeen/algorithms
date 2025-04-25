@@ -1,8 +1,9 @@
 package me.moamenhredeen.leetcode;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /// # Two Sum
 /// Given an array of integers nums and an integer target,
@@ -23,17 +24,23 @@ import java.util.function.BiFunction;
 /// ## Example `3`:
 /// Input: nums = `[3,3]`, target = `6`
 /// Output: `[0,1]`
-public class TwoSum implements BiFunction<List<Integer>, Integer, List<Integer>> {
+public class TwoSum implements Function<TwoSum.Request, TwoSum.Response> {
 
     @Override
-    public List<Integer> apply(List<Integer> list, Integer sum) {
+    public TwoSum.Response apply(TwoSum.Request req) {
         var map = new HashMap<Integer, Integer>();
-        for (int i = 0; i < list.size(); i++) {
-            if (map.containsKey(list.get(i))) {
-                return List.of(i, map.get(list.get(i)));
+        for (int i = 0; i < req.nums().size(); i++) {
+            if (map.containsKey(req.nums().get(i))) {
+                return new Response(List.of(i, map.get(req.nums().get(i))));
             }
-            map.put((sum - list.get(i)), i);
+            map.put((req.target() - req.nums().get(i)), i);
         }
-        return List.of();
+        return new Response(Collections.emptyList());
+    }
+
+    public record Request(List<Integer> nums, Integer target) {
+    }
+
+    public record Response(List<Integer> indices) {
     }
 }
