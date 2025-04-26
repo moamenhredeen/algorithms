@@ -22,6 +22,7 @@ a place, where i practice algorithms, data structures and problem solving
 
 ## ToDo List
 - [ ] setup and use `cargo bench` to benchmark the different implementations of the algoritms
+- [ ] elements of programmin interviews book
 
 ## Resources
 
