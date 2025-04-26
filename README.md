@@ -31,3 +31,4 @@ a place, where i practice algorithms, data structures and problem solving
 
 ## Resources
 - [LeetCode The Hard Way](https://https://leetcodethehardway.com)
+- [USACO Guide](https://usaco.guide/dashboard)
