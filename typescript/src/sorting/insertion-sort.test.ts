@@ -1,22 +1,23 @@
 import { insertionSort } from "./insertion-sort";
-import { describe, test, expect } from "vitest";
+import { describe, test } from "node:test";
+import assert from "assert/strict";
 
 describe("insertion sort", () => {
     test("empty collection", () => {
         const arr: number[] = [];
         insertionSort(arr);
-        expect(arr).toEqual([]);
+        assert.deepEqual(arr, []);
     });
 
     test("one element collection", () => {
         const arr: number[] = [1];
         insertionSort(arr);
-        expect(arr).toEqual([1]);
+        assert.deepEqual(arr, [1]);
     });
 
     test("multi element collection", () => {
         const arr: number[] = [2, 3, 1];
         insertionSort(arr);
-        expect(arr).toEqual([1, 2, 3]);
+        assert.deepEqual(arr, [1, 2, 3]);
     });
 });
