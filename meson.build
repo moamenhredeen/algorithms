@@ -2,10 +2,12 @@ project(
     'algorithms', 'c',
     version : '1.0.0',
     default_options : [
-        'warning_level=3', 'c_std=c89'
+        'warning_level=3',
+        'c_std=c99'
     ]
 )
 
+add_project_arguments('-std=c99', language : 'c')
 lib_args = ['-DBUILDING_MESON_LIBRARY']
 incdir = include_directories('include')
 

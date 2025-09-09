@@ -13,9 +13,9 @@
  * @param nums array of integers
  * @param numsSize size of the nums array
  * @param target the sum of the two numbers
- * @param returnSize ??
+ * @param returnSize  the length of the returned indices array
  * @return indices of the two numbers such that they add up to the target
  */
-int *twoSum(int *nums, int numsSize, int target, int *returnSize);
+int *twoSum(const int *nums, int numsSize, int target, int *returnSize);
 
 #endif
