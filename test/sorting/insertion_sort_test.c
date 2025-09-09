@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../../include/algorithms.h"
+#include "algorithms.h"
 
 int main() {
     int res = insertion_sort(1, 2);
