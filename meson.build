@@ -7,7 +7,7 @@ project(
     ]
 )
 
-add_project_arguments('-std=c99', language : 'c')
+add_project_arguments(['-std=c99', '-Wno-overlength-strings'], language : 'c')
 lib_args = ['-DBUILDING_MESON_LIBRARY']
 incdir = include_directories('include')
 
@@ -16,7 +16,7 @@ incdir = include_directories('include')
 algorithms_library = static_library(
     'algorithms',
     sources: [
-        'src/sorting/insertion_sort.c'
+        'src/sorting/insertion_sort.c',
     ],
     include_directories : incdir,
     install : true,
@@ -45,14 +45,16 @@ endforeach
 leetcode_library = static_library(
     'leetcode',
     sources: [
-        'src/leetcode/two_sum.c'
+        'src/leetcode/two_sum.c',
+        'src/leetcode/length_of_longest_substring.c'
     ],
     include_directories : incdir,
     c_args : lib_args
 )
 
 leetcode_tests = {
-    'two_sum_test': 'test/leetcode/two_sum_test.c'
+    'two_sum_test': 'test/leetcode/two_sum_test.c',
+    'length_of_longest_substring_test': 'test/leetcode/length_of_longest_substring_test.c'
 }
 foreach name, source : leetcode_tests
     test(
