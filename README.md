@@ -12,6 +12,7 @@ implementation of algorithms, data structures, and coding challenge solutions fo
 
 ## LeetCode 
 - [x] [Two Sum](src/leetcode/two_sum.c)
+- [x] [Length of longest substring without repeating characteres](src/leetcode/length_of_longest_substring.c)
 
 ## Advent of Code
 - [ ] 2023
