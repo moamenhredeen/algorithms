@@ -48,6 +48,7 @@ leetcode_library = static_library(
         'src/leetcode/two_sum.c',
         'src/leetcode/length_of_longest_substring.c',
         'src/leetcode/add_two_numbers.c',
+        'src/leetcode/zigzag_conversion.c',
     ],
     include_directories : incdir,
     c_args : lib_args
@@ -57,6 +58,7 @@ leetcode_tests = {
     'two_sum_test': 'test/leetcode/two_sum_test.c',
     'length_of_longest_substring_test': 'test/leetcode/length_of_longest_substring_test.c',
     'add_two_numbers_test': 'test/leetcode/add_two_numbers_test.c',
+    'zigzag_conversion_test': 'test/leetcode/zigzag_conversion_test.c',
 }
 foreach name, source : leetcode_tests
     test(
