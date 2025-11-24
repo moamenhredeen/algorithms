@@ -2,7 +2,7 @@
 
 #include "leetcode.h"
 
-int main() {
+int main(void) {
     int returnSize[] = {0};
     const int nums[] = {2, 7, 11, 15};
     const int *res = twoSum(nums, 4, 9, returnSize);
