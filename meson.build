@@ -11,6 +11,35 @@ add_project_arguments(['-std=c99', '-Wno-overlength-strings'], language : 'c')
 lib_args = ['-DBUILDING_MESON_LIBRARY']
 incdir = include_directories('include')
 
+# -------------------------------- mylib --------------------------------
+
+mylib = static_library(
+    'mylib',
+    sources: [
+        'src/mylib/stack.c',
+    ],
+    include_directories : incdir,
+    install : true,
+    c_args : lib_args
+)
+
+# algorithms tests
+mylib_tests = {
+    'stack_test': 'test/mylib/stack_test.c'
+}
+foreach name, source : mylib_tests
+    test(
+        name,
+        executable(
+            name,
+            source,
+            link_with : mylib,
+            include_directories: include_directories('include/mylib')
+        ),
+        suite: 'mylib'
+    )
+endforeach
+
 # -------------------------------- algorithms --------------------------------
 
 algorithms_library = static_library(
