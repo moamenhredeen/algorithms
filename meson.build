@@ -78,8 +78,10 @@ leetcode_library = static_library(
         'src/leetcode/length_of_longest_substring.c',
         'src/leetcode/add_two_numbers.c',
         'src/leetcode/zigzag_conversion.c',
+        'src/leetcode/daily_temperatures.c',
     ],
     include_directories : incdir,
+    link_with: [mylib],
     c_args : lib_args
 )
 
@@ -88,6 +90,7 @@ leetcode_tests = {
     'length_of_longest_substring_test': 'test/leetcode/length_of_longest_substring_test.c',
     'add_two_numbers_test': 'test/leetcode/add_two_numbers_test.c',
     'zigzag_conversion_test': 'test/leetcode/zigzag_conversion_test.c',
+    'daily_temperatures_test': 'test/leetcode/daily_temperatures_test.c',
 }
 foreach name, source : leetcode_tests
     test(
@@ -96,6 +99,7 @@ foreach name, source : leetcode_tests
             name,
             source,
             link_with : [
+                mylib,
                 algorithms_library,
                 leetcode_library
             ],
