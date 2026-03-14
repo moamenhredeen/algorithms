@@ -11,9 +11,9 @@ include_directories(include)
 
 include(FetchContent)
 FetchContent_Declare(
-    unity
-    GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
-    GIT_TAG v2.6.0
+        unity
+        GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
+        GIT_TAG v2.6.0
 )
 FetchContent_MakeAvailable(unity)
 
@@ -23,13 +23,15 @@ add_library(mylib STATIC src/mylib/stack.c)
 
 add_library(algorithms_lib STATIC src/sorting/insertion_sort.c)
 
+add_library(ds_lib STATIC src/ds/linked_list.c)
+
 add_library(leetcode STATIC
-    src/leetcode/two_sum.c
-    src/leetcode/length_of_longest_substring.c
-    src/leetcode/add_two_numbers.c
-    src/leetcode/zigzag_conversion.c
-    src/leetcode/daily_temperatures.c
-    src/leetcode/rotate_list.c
+        src/leetcode/two_sum.c
+        src/leetcode/length_of_longest_substring.c
+        src/leetcode/add_two_numbers.c
+        src/leetcode/zigzag_conversion.c
+        src/leetcode/daily_temperatures.c
+        src/leetcode/rotate_list.c
 )
 target_link_libraries(leetcode PRIVATE mylib)
 
@@ -49,6 +51,9 @@ target_include_directories(stack_test PRIVATE include/mylib)
 
 # algorithms tests
 add_unit_test(insertion_sort_test test/sorting/insertion_sort_test.c algorithms_lib)
+
+# data structures tests
+add_unit_test(linked_list_test test/ds/linked_list_test.c ds_lib)
 
 # leetcode tests
 add_unit_test(daily_temperatures_test test/leetcode/daily_temperatures_test.c leetcode mylib algorithms_lib)
