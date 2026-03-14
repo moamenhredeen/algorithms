@@ -1,6 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
-
 #include "leetcode.h"
 
 
@@ -17,3 +15,4 @@ int main(void) {
     }
     free(res);
 }
+

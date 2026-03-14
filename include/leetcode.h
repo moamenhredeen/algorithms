@@ -84,6 +84,27 @@ char* zigzag_convert(char* s, int numRows);
  * 1 <= temperatures.length <= 105
  * 30 <= temperatures[i] <= 100
  */
-int* daily_temperatures(int* temperatures, int temperaturesSize, int* returnSize);
+int* daily_temperatures(const int* temperatures, int temperaturesSize, int* returnSize);
+
+/**
+ * 61. Rotate List
+ * level: medium
+ *
+ * Given the head of a linked list, rotate the list to the right by k places.
+ * 
+ * Example 1:
+ * Input: head = [1,2,3,4,5], k = 2
+ * Output: [4,5,1,2,3]
+ * 
+ * Example 2:
+ * Input: head = [0,1,2], k = 4
+ * Output: [2,0,1]
+ *
+ * Constraints:
+ * The number of nodes in the list is in the range [0, 500].
+ * -100 <= Node.val <= 100
+ * 0 <= k <= 2 * 109
+ */
+struct ListNode* rotateRight(struct ListNode* head, int k);
 
 #endif

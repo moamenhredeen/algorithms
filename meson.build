@@ -79,6 +79,7 @@ leetcode_library = static_library(
         'src/leetcode/add_two_numbers.c',
         'src/leetcode/zigzag_conversion.c',
         'src/leetcode/daily_temperatures.c',
+        'src/leetcode/rotate_list.c',
     ],
     include_directories : incdir,
     link_with: [mylib],
@@ -92,6 +93,7 @@ leetcode_tests = {
 #    'add_two_numbers_test': 'test/leetcode/add_two_numbers_test.c',
 #    'zigzag_conversion_test': 'test/leetcode/zigzag_conversion_test.c',
     'daily_temperatures_test': 'test/leetcode/daily_temperatures_test.c',
+    'rotate_list_test': 'test/leetcode/rotate_list_test.c',
 }
 foreach name, source : leetcode_tests
     test(
