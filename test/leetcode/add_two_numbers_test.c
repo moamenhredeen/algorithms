@@ -1,11 +1,10 @@
-#include <assert.h>
+#include "unity.h"
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h>
 
 #include "leetcode.h"
 
-struct ListNode *fill(const int *arr, int size) {
+static struct ListNode *fill(const int *arr, int size) {
     struct ListNode *start = malloc(sizeof(struct ListNode));
     struct ListNode *curr = start;
     for (int i = 0; i < size; i++) {
@@ -16,18 +15,7 @@ struct ListNode *fill(const int *arr, int size) {
     return start;
 }
 
-void l(const struct ListNode *l, int size) {
-    printf("[");
-    for (int i = 0; i < size; i++) {
-        if (l->val) {
-            printf("%d ", l->val);
-            l = l->next;
-        }
-    }
-    printf("]\n");
-}
-
-bool match (struct ListNode *list, const int *arr, int size) {
+static bool match(struct ListNode *list, const int *arr, int size) {
     for (int i = 0; i < size; i++) {
         if (list->val != arr[i]) return false;
         list = list->next;
@@ -35,31 +23,34 @@ bool match (struct ListNode *list, const int *arr, int size) {
     return true;
 }
 
-int main() {
+void setUp(void) {}
+void tearDown(void) {}
 
-    struct ListNode *res;
-    struct ListNode *l1;
-    struct ListNode *l2;
+void test_add_two_numbers_equal_length(void) {
+    struct ListNode *l1 = fill((int[]){7, 8, 9}, 3);
+    struct ListNode *l2 = fill((int[]){7, 8, 9}, 3);
+    struct ListNode *res = addTwoNumbers(l1, l2);
+    TEST_ASSERT_TRUE(match(res, (int[]){4, 7, 9, 1}, 4));
+}
 
-    l1 = fill((int[]){7, 8, 9}, 3);
-    l2 = fill((int[]){7, 8, 9}, 3);
-    res = addTwoNumbers(l1, l2);
-    l(res, 4);
-    assert(match(res, (int[]){4, 7, 9, 1}, 4) == true);
+void test_add_two_numbers_basic(void) {
+    struct ListNode *l1 = fill((int[]){2, 4, 3}, 3);
+    struct ListNode *l2 = fill((int[]){5, 6, 4}, 3);
+    struct ListNode *res = addTwoNumbers(l1, l2);
+    TEST_ASSERT_TRUE(match(res, (int[]){7, 0, 8}, 3));
+}
 
+void test_add_two_numbers_different_length(void) {
+    struct ListNode *l1 = fill((int[]){9, 9, 9, 9, 9, 9, 9}, 7);
+    struct ListNode *l2 = fill((int[]){9, 9, 9, 9}, 4);
+    struct ListNode *res = addTwoNumbers(l1, l2);
+    TEST_ASSERT_TRUE(match(res, (int[]){8, 9, 9, 9, 0, 0, 0, 1}, 8));
+}
 
-    l1 = fill((int[]){2, 4, 3}, 3);
-    l2 = fill((int[]){5, 6, 4}, 3);
-    res = addTwoNumbers(l1, l2);
-    l(res, 3);
-    assert(match(res, (int[]){7, 0, 8}, 3) == true);
-
-
-    l1 = fill((int[]){9,9,9,9,9,9,9}, 7);
-    l2 = fill((int[]){9,9,9,9}, 4);
-    res = addTwoNumbers(l1, l2);
-    l(res, 8);
-    assert(match(res, (int[]){8,9,9,9,0,0,0,1}, 8) == true);
-
-    return 0;
+int main(void) {
+    UNITY_BEGIN();
+    RUN_TEST(test_add_two_numbers_equal_length);
+    RUN_TEST(test_add_two_numbers_basic);
+    RUN_TEST(test_add_two_numbers_different_length);
+    return UNITY_END();
 }
