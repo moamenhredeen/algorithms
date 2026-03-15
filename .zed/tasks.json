@@ -13,7 +13,7 @@
   },
   {
     "label": "test",
-    "command": "ctest --test-dir build",
+    "command": "cmake --build build && ctest --test-dir build --output-on-failure",
     "use_new_terminal": false,
     "reveal": "no_focus",
   },
