@@ -17,20 +17,23 @@ void test_create_single_item_linked_list(void) {
     TEST_ASSERT_NOT_NULL(list);
     TEST_ASSERT_EQUAL_INT(1, list->data);
     TEST_ASSERT_NULL(list->next);
+    linked_list_destroy(list);
 }
 
 void test_append_to_empty_linked_list(void) {
-    const linked_list_t *list = linked_list_append(NULL, 1);
+    linked_list_t *list = linked_list_append(NULL, 1);
     TEST_ASSERT_NULL(list);
+    linked_list_destroy(list);
 }
 
 void test_append_to_linked_list(void) {
     linked_list_t *list = linked_list_create(1);
-    linked_list_t *new_list = linked_list_append(list, 2);
+    linked_list_append(list, 2);
     TEST_ASSERT_NOT_NULL(list);
     TEST_ASSERT_EQUAL_INT(1, list->data);
     TEST_ASSERT_NOT_NULL(list->next);
     TEST_ASSERT_EQUAL_INT(2, list->next->data);
+    linked_list_destroy(list);
 }
 
 
@@ -51,6 +54,7 @@ void test_append_multiple_nodes_in_sequence(void) {
         current = current->next;
     }
     TEST_ASSERT_NULL(current);
+    linked_list_destroy(list);
 }
 
 void test_append_returns_new_node(void) {
@@ -62,6 +66,7 @@ void test_append_returns_new_node(void) {
     TEST_ASSERT_EQUAL_INT(2, new_node->data);
     TEST_ASSERT_NULL(new_node->next);
     TEST_ASSERT_NOT_EQUAL(list, new_node);
+    linked_list_destroy(list);
 }
 
 void test_append_large_number_of_nodes(void) {
@@ -82,6 +87,7 @@ void test_append_large_number_of_nodes(void) {
         current = current->next;
     }
     TEST_ASSERT_EQUAL_INT(101, count);
+    linked_list_destroy(list);
 }
 
 void test_append_maintains_list_integrity(void) {
@@ -94,6 +100,7 @@ void test_append_maintains_list_integrity(void) {
     TEST_ASSERT_EQUAL_PTR(third, list->next->next);
     TEST_ASSERT_EQUAL_PTR(third, second->next);
     TEST_ASSERT_NULL(third->next);
+    linked_list_destroy(list);
 }
 
 
@@ -103,19 +110,20 @@ void test_delete_from_empty_linked_list(void) {
 }
 
 void test_delete_from_linked_list(void) {
-    linked_list_t *node_1 = linked_list_create(1);
-    linked_list_t *node_2 = linked_list_append(node_1, 2);
-    linked_list_t *delete_result = linked_list_delete(node_1, node_2);
+    linked_list_t *list = linked_list_create(1);
+    linked_list_append(list, 2);
+    linked_list_t *delete_result = linked_list_delete(list, list->next);
     TEST_ASSERT_NOT_NULL(delete_result);
     TEST_ASSERT_EQUAL_INT(1, delete_result->data);
     TEST_ASSERT_NULL(delete_result->next);
-    TEST_ASSERT_NULL(node_1->next);
+    TEST_ASSERT_NULL(list->next);
+    linked_list_destroy(list);
 }
 
 
 void test_delete_from_single_item_linked_list(void) {
-    linked_list_t *node_1 = linked_list_create(1);
-    const linked_list_t *delete_result = linked_list_delete(node_1, node_1);
+    linked_list_t *list = linked_list_create(1);
+    const linked_list_t *delete_result = linked_list_delete(list, list);
     TEST_ASSERT_NULL(delete_result);
 }
 
@@ -129,19 +137,21 @@ void test_delete_head_node_from_list(void) {
     TEST_ASSERT_EQUAL_INT(2, new_head->data);
     TEST_ASSERT_NOT_NULL(new_head->next);
     TEST_ASSERT_EQUAL_INT(3, new_head->next->data);
+    linked_list_destroy(new_head);
 }
 
 void test_delete_middle_node_from_list(void) {
-    linked_list_t *node_1 = linked_list_create(1);
-    linked_list_t *node_2 = linked_list_append(node_1, 2);
-    linked_list_t *node_3 = linked_list_append(node_1, 3);
+    linked_list_t *list = linked_list_create(1);
+    linked_list_append(list, 2);
+    linked_list_append(list, 3);
 
-    linked_list_t *result = linked_list_delete(node_1, node_2);
+    linked_list_t *result = linked_list_delete(list, list->next);
     TEST_ASSERT_NOT_NULL(result);
     TEST_ASSERT_EQUAL_INT(1, result->data);
     TEST_ASSERT_NOT_NULL(result->next);
     TEST_ASSERT_EQUAL_INT(3, result->next->data);
     TEST_ASSERT_NULL(result->next->next);
+    linked_list_destroy(result);
 }
 
 void test_delete_non_existent_node(void) {
@@ -159,6 +169,7 @@ void test_delete_non_existent_node(void) {
     TEST_ASSERT_EQUAL_INT(2, result->next->data);
 
     linked_list_destroy(orphan_node);
+    linked_list_destroy(node_1);
 }
 
 void test_delete_last_node_from_long_list(void) {
@@ -180,6 +191,7 @@ void test_delete_last_node_from_long_list(void) {
         current = current->next;
     }
     TEST_ASSERT_NULL(current);
+    linked_list_destroy(result);
 }
 
 void test_find_in_empty_linked_list(void) {
@@ -188,13 +200,14 @@ void test_find_in_empty_linked_list(void) {
 }
 
 void test_find_in_linked_list(void) {
-    linked_list_t *node_1 = linked_list_create(1);
-    linked_list_t *node_2 = linked_list_append(node_1, 2);
-    linked_list_t *node_3 = linked_list_append(node_2, 3);
+    linked_list_t *list = linked_list_create(1);
+    linked_list_append(list, 2);
+    linked_list_append(list, 3);
 
-    const linked_list_t *found = linked_list_find(node_1, 2);
+    const linked_list_t *found = linked_list_find(list, 2);
     TEST_ASSERT_NOT_NULL(found);
     TEST_ASSERT_EQUAL_INT(2, found->data);
+    linked_list_destroy(list);
 }
 
 void test_find_non_existent_element(void) {
@@ -204,6 +217,7 @@ void test_find_non_existent_element(void) {
 
     const linked_list_t *found = linked_list_find(list, 99);
     TEST_ASSERT_NULL(found);
+    linked_list_destroy(list);
 }
 
 void test_find_first_element(void) {
@@ -215,6 +229,7 @@ void test_find_first_element(void) {
     TEST_ASSERT_NOT_NULL(found);
     TEST_ASSERT_EQUAL_INT(10, found->data);
     TEST_ASSERT_EQUAL_PTR(list, found);
+    linked_list_destroy(list);
 }
 
 void test_find_last_element_in_long_list(void) {
@@ -227,6 +242,7 @@ void test_find_last_element_in_long_list(void) {
     TEST_ASSERT_NOT_NULL(found);
     TEST_ASSERT_EQUAL_INT(10, found->data);
     TEST_ASSERT_NULL(found->next);
+    linked_list_destroy(list);
 }
 
 void test_find_middle_element(void) {
@@ -241,6 +257,7 @@ void test_find_middle_element(void) {
     TEST_ASSERT_EQUAL_INT(15, found->data);
     TEST_ASSERT_NOT_NULL(found->next);
     TEST_ASSERT_EQUAL_INT(20, found->next->data);
+    linked_list_destroy(list);
 }
 
 
