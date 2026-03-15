@@ -271,19 +271,19 @@ int main(void) {
     // Append tests
     RUN_TEST(test_append_to_empty_linked_list);
     RUN_TEST(test_append_to_linked_list);
-    // RUN_TEST(test_append_multiple_nodes_in_sequence);
+    RUN_TEST(test_append_multiple_nodes_in_sequence);
     RUN_TEST(test_append_returns_new_node);
-    // RUN_TEST(test_append_large_number_of_nodes);
-    // RUN_TEST(test_append_maintains_list_integrity);
+    RUN_TEST(test_append_large_number_of_nodes);
+    RUN_TEST(test_append_maintains_list_integrity);
 
     // Delete tests
     RUN_TEST(test_delete_from_empty_linked_list);
     RUN_TEST(test_delete_from_linked_list);
     RUN_TEST(test_delete_from_single_item_linked_list);
-    // RUN_TEST(test_delete_head_node_from_list);
+    RUN_TEST(test_delete_head_node_from_list);
     RUN_TEST(test_delete_middle_node_from_list);
     RUN_TEST(test_delete_non_existent_node);
-    // RUN_TEST(test_delete_last_node_from_long_list);
+    RUN_TEST(test_delete_last_node_from_long_list);
 
     // Find tests
     RUN_TEST(test_find_in_empty_linked_list);
@@ -291,7 +291,7 @@ int main(void) {
     RUN_TEST(test_find_non_existent_element);
     RUN_TEST(test_find_first_element);
     RUN_TEST(test_find_last_element_in_long_list);
-    // RUN_TEST(test_find_middle_element);
+    RUN_TEST(test_find_middle_element);
 
     // Memory management tests
     RUN_TEST(test_destroy_empty_linked_list);
