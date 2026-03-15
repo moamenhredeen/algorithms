@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "leetcode.h"
 
 struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2)

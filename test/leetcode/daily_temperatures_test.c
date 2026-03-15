@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "leetcode.h"
 #include "unity.h"
 

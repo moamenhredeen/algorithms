@@ -1,10 +1,7 @@
 #ifndef ALGORITHMS_LEETCODE_H
 #define ALGORITHMS_LEETCODE_H
 
-#include <math.h>
 #include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
 
 /**
  * Given an array of integers nums and an integer target,

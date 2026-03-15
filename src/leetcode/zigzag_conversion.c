@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "leetcode.h"
 
 char *zigzag_convert(char *s, int numRows)

@@ -23,9 +23,6 @@ option(ENABLE_COVERAGE "Enable code coverage" OFF)
 if(ENABLE_COVERAGE)
     include(CodeCoverage)
     enable_coverage()
-
-    # Setup coverage targets after all tests are defined
-    # This will be called at the end of the file
 endif()
 
 # -------------------------------- dependencies --------------------------------
@@ -40,11 +37,14 @@ FetchContent_MakeAvailable(unity)
 
 # -------------------------------- libraries --------------------------------
 
-add_library(mylib STATIC src/mylib/stack.c)
+add_library(algorithms_lib STATIC
+    src/sorting/insertion_sort.c
+)
 
-add_library(algorithms_lib STATIC src/sorting/insertion_sort.c)
-
-add_library(ds_lib STATIC src/ds/linked_list.c)
+add_library(ds_lib STATIC
+    src/ds/linked_list.c
+    src/ds/stack.c
+)
 
 add_library(leetcode STATIC
         src/leetcode/two_sum.c
@@ -54,7 +54,7 @@ add_library(leetcode STATIC
         src/leetcode/daily_temperatures.c
         src/leetcode/rotate_list.c
 )
-target_link_libraries(leetcode PRIVATE mylib)
+target_link_libraries(leetcode PRIVATE ds_lib)
 
 # -------------------------------- tests --------------------------------
 
@@ -66,25 +66,22 @@ function(add_unit_test name source)
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
 
-# mylib tests
-add_unit_test(stack_test test/mylib/stack_test.c mylib)
-target_include_directories(stack_test PRIVATE include/mylib)
-
 # algorithms tests
 add_unit_test(insertion_sort_test test/sorting/insertion_sort_test.c algorithms_lib)
 
 # data structures tests
 add_unit_test(linked_list_test test/ds/linked_list_test.c ds_lib)
+add_unit_test(stack_test test/ds/stack_test.c ds_lib)
 
 # leetcode tests
-add_unit_test(daily_temperatures_test test/leetcode/daily_temperatures_test.c leetcode mylib algorithms_lib)
-add_unit_test(rotate_list_test test/leetcode/rotate_list_test.c leetcode mylib algorithms_lib)
+add_unit_test(daily_temperatures_test test/leetcode/daily_temperatures_test.c leetcode ds_lib algorithms_lib)
+add_unit_test(rotate_list_test test/leetcode/rotate_list_test.c leetcode ds_lib algorithms_lib)
 
 # TODO: fix tests
-# add_unit_test(two_sum_test test/leetcode/two_sum_test.c leetcode mylib algorithms_lib)
-# add_unit_test(length_of_longest_substring_test test/leetcode/length_of_longest_substring_test.c leetcode mylib algorithms_lib)
-# add_unit_test(add_two_numbers_test test/leetcode/add_two_numbers_test.c leetcode mylib algorithms_lib)
-# add_unit_test(zigzag_conversion_test test/leetcode/zigzag_conversion_test.c leetcode mylib algorithms_lib)
+# add_unit_test(two_sum_test test/leetcode/two_sum_test.c leetcode ds_lib algorithms_lib)
+# add_unit_test(length_of_longest_substring_test test/leetcode/length_of_longest_substring_test.c leetcode ds_lib algorithms_lib)
+# add_unit_test(add_two_numbers_test test/leetcode/add_two_numbers_test.c leetcode ds_lib algorithms_lib)
+# add_unit_test(zigzag_conversion_test test/leetcode/zigzag_conversion_test.c leetcode ds_lib algorithms_lib)
 
 # -------------------------------- coverage targets --------------------------------
 
