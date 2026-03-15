@@ -16,3 +16,6 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build --output-on-failure
+
+      - name: Lint
+        run: run-clang-tidy -p build src/

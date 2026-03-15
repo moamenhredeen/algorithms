@@ -3,6 +3,7 @@ project(algorithms VERSION 1.0.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(-Wall -Wextra -Wpedantic -Wno-overlength-strings)
 
 include_directories(include)
