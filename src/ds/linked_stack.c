@@ -2,14 +2,16 @@
 
 #include "ds/linked_stack.h"
 
-linked_stack_t *linked_stack_create(void){
+linked_stack_t *linked_stack_create(void)
+{
     linked_stack_t *s = malloc(sizeof(linked_stack_t));
     s->head = NULL;
     s->size = 0;
     return s;
 }
 
-void linked_stack_destroy(linked_stack_t *s) {
+void linked_stack_destroy(linked_stack_t *s)
+{
     linked_stack_node_t *current = s->head;
     linked_stack_node_t *next = NULL;
     free(s);
@@ -20,7 +22,8 @@ void linked_stack_destroy(linked_stack_t *s) {
     }
 }
 
-void linked_stack_push(linked_stack_t *s, const int element){
+void linked_stack_push(linked_stack_t *s, const int element)
+{
     linked_stack_node_t *new_node = malloc(sizeof(linked_stack_node_t));
     new_node->data = element;
     new_node->next = s->head;
@@ -28,7 +31,8 @@ void linked_stack_push(linked_stack_t *s, const int element){
     s->size++;
 }
 
-int linked_stack_pop(linked_stack_t *s) {
+int linked_stack_pop(linked_stack_t *s)
+{
     if (s->head == NULL) {
         return 0;
     }
@@ -44,7 +48,8 @@ int linked_stack_pop(linked_stack_t *s) {
     return data;
 }
 
-int linked_stack_peek(const linked_stack_t *s){
+int linked_stack_peek(const linked_stack_t *s)
+{
     if (s->head == NULL) {
         return 0;
     }

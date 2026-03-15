@@ -13,7 +13,6 @@ typedef struct LinkedStack {
     size_t size;
 } linked_stack_t;
 
-
 linked_stack_t *linked_stack_create(void);
 void linked_stack_destroy(linked_stack_t *s);
 void linked_stack_push(linked_stack_t *s, const int element);

@@ -1,5 +1,5 @@
-#include "leetcode.h"
 #include "ds/stack.h"
+#include "leetcode.h"
 #include <stdlib.h>
 
 int *daily_temperatures(const int *temperatures, int temperaturesSize, int *returnSize)
