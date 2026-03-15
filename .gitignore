@@ -5,3 +5,4 @@ build-coverage/
 .cache/
 .idea/
 cmake-build-*
+docs/book/
