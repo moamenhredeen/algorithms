@@ -22,7 +22,11 @@ linked_list_t *linked_list_append(linked_list_t *list, const int element) {
     linked_list_t *new_list = malloc(sizeof(linked_list_t));
     new_list->data = element;
 
-    list->next = new_list;
+    linked_list_t *last = list;
+    while (last->next != NULL) {
+        last = last->next;
+    }
+    last->next = new_list;
     return new_list;
 }
 
