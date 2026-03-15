@@ -1,5 +1,11 @@
 [
   {
+    "label": "clean",
+    "command": "rm -rf build*",
+    "use_new_terminal": false,
+    "reveal": "never",
+  },
+  {
     "label": "reconfigure build",
     "command": "cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug",
     "use_new_terminal": false,
