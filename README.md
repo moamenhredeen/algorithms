@@ -6,7 +6,7 @@ implementation of algorithms, data structures, and coding challenge solutions fo
 
 
 ## Data Structures
-- [ ] Linked List
+- [x] [Linked List](./include/ds/linked_list.h)
 - [ ] Hash Table
 
 
