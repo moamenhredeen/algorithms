@@ -1,0 +1,26 @@
+[
+  {
+    "label": "reconfigure build",
+    "command": "cmake -B build",
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+  },
+  {
+    "label": "build",
+    "command": "cmake --build build",
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+  },
+  {
+    "label": "reconfigure coverage build",
+    "command": "cmake -B build-coverage -DCMAKE_BUILD_TYPE=Coverage -DENABLE_COVERAGE=ON",
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+  },
+  {
+    "label": "coverage",
+    "command": "cmake --build build-coverage --target coverage",
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+  },
+]
