@@ -60,28 +60,19 @@ target_link_libraries(leetcode PRIVATE ds_lib)
 
 enable_testing()
 
-function(add_unit_test name source)
-    add_executable(${name} ${source})
-    target_link_libraries(${name} PRIVATE unity ${ARGN})
-    add_test(NAME ${name} COMMAND ${name})
+function(add_unit_test pattern)
+    file(GLOB test_sources ${pattern})
+    foreach(source ${test_sources})
+        get_filename_component(name ${source} NAME_WE)
+        add_executable(${name} ${source})
+        target_link_libraries(${name} PRIVATE unity ${ARGN})
+        add_test(NAME ${name} COMMAND ${name})
+    endforeach()
 endfunction()
 
-# algorithms tests
-add_unit_test(insertion_sort_test test/sorting/insertion_sort_test.c algorithms_lib)
-
-# data structures tests
-add_unit_test(linked_list_test test/ds/linked_list_test.c ds_lib)
-add_unit_test(stack_test test/ds/stack_test.c ds_lib)
-
-# leetcode tests
-add_unit_test(daily_temperatures_test test/leetcode/daily_temperatures_test.c leetcode ds_lib algorithms_lib)
-add_unit_test(rotate_list_test test/leetcode/rotate_list_test.c leetcode ds_lib algorithms_lib)
-
-# TODO: fix tests
-# add_unit_test(two_sum_test test/leetcode/two_sum_test.c leetcode ds_lib algorithms_lib)
-# add_unit_test(length_of_longest_substring_test test/leetcode/length_of_longest_substring_test.c leetcode ds_lib algorithms_lib)
-# add_unit_test(add_two_numbers_test test/leetcode/add_two_numbers_test.c leetcode ds_lib algorithms_lib)
-# add_unit_test(zigzag_conversion_test test/leetcode/zigzag_conversion_test.c leetcode ds_lib algorithms_lib)
+add_unit_test(test/sorting/*_test.c algorithms_lib)
+add_unit_test(test/ds/*_test.c ds_lib)
+add_unit_test(test/leetcode/*_test.c leetcode ds_lib algorithms_lib)
 
 # -------------------------------- coverage targets --------------------------------
 
