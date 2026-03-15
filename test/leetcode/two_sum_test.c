@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "leetcode.h"
 #include "unity.h"
 
@@ -18,6 +20,7 @@ void test_two_sum_basic(void)
 
     int expected[] = {0, 1};
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, res, 2);
+    free((void *)res);
 }
 
 int main(void)

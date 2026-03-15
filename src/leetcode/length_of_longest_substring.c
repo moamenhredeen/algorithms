@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include <stdio.h>
 
 #include "leetcode.h"
 #include "uthash.h"
@@ -23,6 +22,7 @@ void add_item(char c, int index)
 
     if (old_item) {
         HASH_REPLACE(hh, seen_items, key, sizeof(char), item, old_item);
+        free(old_item);
     } else {
         HASH_ADD(hh, seen_items, key, sizeof(char), item);
     }
@@ -57,7 +57,12 @@ int lengthOfLongestSubstring(char *s)
         max = (i - start + 1) > max ? (i - start + 1) : max;
     }
 
-    HASH_CLEAR(hh, seen_items);
+    item_t *cur, *tmp;
+    HASH_ITER(hh, seen_items, cur, tmp)
+    {
+        HASH_DEL(seen_items, cur);
+        free(cur);
+    }
     return max;
 }
 
