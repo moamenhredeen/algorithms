@@ -8,6 +8,13 @@ add_compile_options(-Wall -Wextra -Wpedantic -Wno-overlength-strings)
 
 include_directories(include)
 
+# -------------------------------- sanitizers -------------------------------
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address)
+endif()
+
 # -------------------------------- code coverage --------------------------------
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
