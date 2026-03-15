@@ -19,3 +19,27 @@ jobs:
 
       - name: Lint
         run: run-clang-tidy -p build src/
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install lcov
+        run: sudo apt-get install -y lcov
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Coverage -DENABLE_COVERAGE=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Generate coverage
+        run: cmake --build build --target coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: build/coverage.filtered.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: moamenhredeen/algorithms
