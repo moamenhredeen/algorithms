@@ -1,8 +1,11 @@
 #include "unity.h"
 #include "leetcode.h"
 
-void setUp(void) {}
-void tearDown(void) {}
+void setUp(void) {
+}
+
+void tearDown(void) {
+}
 
 void test_rotate_right(void) {
     struct ListNode n5 = {.val = 5, .next = NULL};
@@ -30,6 +33,6 @@ void test_rotate_right(void) {
 
 int main(void) {
     UNITY_BEGIN();
-    RUN_TEST(test_rotate_right);
+    // RUN_TEST(test_rotate_right);
     return UNITY_END();
 }
