@@ -1,13 +1,19 @@
 [
   {
     "label": "reconfigure build",
-    "command": "cmake -B build",
+    "command": "cmake -B build -DCMAKE_BUILD_TYPE=Debug",
     "use_new_terminal": false,
     "reveal": "no_focus",
   },
   {
     "label": "build",
     "command": "cmake --build build",
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+  },
+  {
+    "label": "test",
+    "command": "ctest --test-dir build",
     "use_new_terminal": false,
     "reveal": "no_focus",
   },
