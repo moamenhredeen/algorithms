@@ -7,6 +7,19 @@ add_compile_options(-Wall -Wextra -Wpedantic -Wno-overlength-strings)
 
 include_directories(include)
 
+# -------------------------------- code coverage --------------------------------
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+option(ENABLE_COVERAGE "Enable code coverage" OFF)
+
+if(ENABLE_COVERAGE)
+    include(CodeCoverage)
+    enable_coverage()
+
+    # Setup coverage targets after all tests are defined
+    # This will be called at the end of the file
+endif()
+
 # -------------------------------- dependencies --------------------------------
 
 include(FetchContent)
@@ -64,3 +77,15 @@ add_unit_test(rotate_list_test test/leetcode/rotate_list_test.c leetcode mylib a
 # add_unit_test(length_of_longest_substring_test test/leetcode/length_of_longest_substring_test.c leetcode mylib algorithms_lib)
 # add_unit_test(add_two_numbers_test test/leetcode/add_two_numbers_test.c leetcode mylib algorithms_lib)
 # add_unit_test(zigzag_conversion_test test/leetcode/zigzag_conversion_test.c leetcode mylib algorithms_lib)
+
+# -------------------------------- coverage targets --------------------------------
+
+if(ENABLE_COVERAGE)
+    setup_target_for_coverage_lcov(
+        NAME coverage
+        TEST_COMMAND ctest
+        EXCLUDE '*/test/*' '*/build/*' '*/_deps/*'
+    )
+
+    message(STATUS "Coverage target available: make coverage")
+endif()

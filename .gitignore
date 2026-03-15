@@ -1,6 +1,7 @@
 **/.DS_Store
 buildDir/
 build/
+build-coverage/
 .cache/
 .idea/
-cmake-build-debug
+cmake-build-*
