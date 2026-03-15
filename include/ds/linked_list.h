@@ -18,4 +18,6 @@ linked_list_t *linked_list_delete(linked_list_t *list, const linked_list_t *elem
 
 linked_list_t *linked_list_find(linked_list_t *list, int element);
 
+void linked_list_destroy(linked_list_t *list);
+
 #endif //LINKED_LIST_H

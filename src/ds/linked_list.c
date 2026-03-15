@@ -72,3 +72,16 @@ linked_list_t *linked_list_find(linked_list_t *list, const int element) {
     }
     return NULL;
 }
+
+void linked_list_destroy(linked_list_t *list) {
+    if (list == NULL) {
+        return;
+    }
+    linked_list_t *current = list;
+    linked_list_t *next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+}
