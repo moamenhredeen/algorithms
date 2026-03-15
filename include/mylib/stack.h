@@ -12,13 +12,12 @@ typedef struct Stack {
     size_t element_size;
 } stack_t;
 
+stack_t *stack_create(size_t element_size, int capacity);
+void stack_destroy(stack_t *s);
+int stack_is_empty(const stack_t *s);
+int stack_is_full(stack_t *s);
+int stack_push(stack_t *s, const void *element);
+int stack_pop(stack_t *s);
+int stack_peek(const stack_t *s, void *element);
 
-stack_t*    stack_create    (size_t element_size, int capacity);
-void        stack_destroy   (stack_t *s);
-int         stack_is_empty  (const stack_t *s);
-int         stack_is_full   (stack_t *s);
-int         stack_push      (stack_t *s, const void *element);
-int         stack_pop       (stack_t *s);
-int         stack_peek      (const stack_t *s, void* element);
-
-#endif //ALGORITHMS_DATA_STRUCTURES_H
+#endif // ALGORITHMS_DATA_STRUCTURES_H

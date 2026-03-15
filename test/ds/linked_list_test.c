@@ -2,17 +2,19 @@
 // Created by moamen on 3/14/26.
 //
 
-#include "unity.h"
 #include "ds/linked_list.h"
+#include "unity.h"
 
-
-void setUp(void) {
+void setUp(void)
+{
 }
 
-void tearDown(void) {
+void tearDown(void)
+{
 }
 
-void test_create_single_item_linked_list(void) {
+void test_create_single_item_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     TEST_ASSERT_NOT_NULL(list);
     TEST_ASSERT_EQUAL_INT(1, list->data);
@@ -20,13 +22,15 @@ void test_create_single_item_linked_list(void) {
     linked_list_destroy(list);
 }
 
-void test_append_to_empty_linked_list(void) {
+void test_append_to_empty_linked_list(void)
+{
     linked_list_t *list = linked_list_append(NULL, 1);
     TEST_ASSERT_NULL(list);
     linked_list_destroy(list);
 }
 
-void test_append_to_linked_list(void) {
+void test_append_to_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_append(list, 2);
     TEST_ASSERT_NOT_NULL(list);
@@ -36,8 +40,8 @@ void test_append_to_linked_list(void) {
     linked_list_destroy(list);
 }
 
-
-void test_append_multiple_nodes_in_sequence(void) {
+void test_append_multiple_nodes_in_sequence(void)
+{
     linked_list_t *list = linked_list_create(1);
 
     // Append multiple nodes
@@ -57,7 +61,8 @@ void test_append_multiple_nodes_in_sequence(void) {
     linked_list_destroy(list);
 }
 
-void test_append_returns_new_node(void) {
+void test_append_returns_new_node(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_t *new_node = linked_list_append(list, 2);
 
@@ -69,7 +74,8 @@ void test_append_returns_new_node(void) {
     linked_list_destroy(list);
 }
 
-void test_append_large_number_of_nodes(void) {
+void test_append_large_number_of_nodes(void)
+{
     linked_list_t *list = linked_list_create(0);
 
     // Append a large number of nodes
@@ -90,7 +96,8 @@ void test_append_large_number_of_nodes(void) {
     linked_list_destroy(list);
 }
 
-void test_append_maintains_list_integrity(void) {
+void test_append_maintains_list_integrity(void)
+{
     linked_list_t *list = linked_list_create(10);
     linked_list_t *second = linked_list_append(list, 20);
     linked_list_t *third = linked_list_append(list, 30);
@@ -103,13 +110,14 @@ void test_append_maintains_list_integrity(void) {
     linked_list_destroy(list);
 }
 
-
-void test_delete_from_empty_linked_list(void) {
+void test_delete_from_empty_linked_list(void)
+{
     const linked_list_t *delete_result = linked_list_delete(NULL, NULL);
     TEST_ASSERT_NULL(delete_result);
 }
 
-void test_delete_from_linked_list(void) {
+void test_delete_from_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_append(list, 2);
     linked_list_t *delete_result = linked_list_delete(list, list->next);
@@ -120,14 +128,15 @@ void test_delete_from_linked_list(void) {
     linked_list_destroy(list);
 }
 
-
-void test_delete_from_single_item_linked_list(void) {
+void test_delete_from_single_item_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     const linked_list_t *delete_result = linked_list_delete(list, list);
     TEST_ASSERT_NULL(delete_result);
 }
 
-void test_delete_head_node_from_list(void) {
+void test_delete_head_node_from_list(void)
+{
     linked_list_t *node_1 = linked_list_create(1);
     linked_list_append(node_1, 2);
     linked_list_append(node_1, 3);
@@ -140,7 +149,8 @@ void test_delete_head_node_from_list(void) {
     linked_list_destroy(new_head);
 }
 
-void test_delete_middle_node_from_list(void) {
+void test_delete_middle_node_from_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_append(list, 2);
     linked_list_append(list, 3);
@@ -154,7 +164,8 @@ void test_delete_middle_node_from_list(void) {
     linked_list_destroy(result);
 }
 
-void test_delete_non_existent_node(void) {
+void test_delete_non_existent_node(void)
+{
     linked_list_t *node_1 = linked_list_create(1);
     linked_list_append(node_1, 2);
 
@@ -172,7 +183,8 @@ void test_delete_non_existent_node(void) {
     linked_list_destroy(node_1);
 }
 
-void test_delete_last_node_from_long_list(void) {
+void test_delete_last_node_from_long_list(void)
+{
     linked_list_t *node_1 = linked_list_create(1);
     linked_list_append(node_1, 2);
     linked_list_append(node_1, 3);
@@ -194,12 +206,14 @@ void test_delete_last_node_from_long_list(void) {
     linked_list_destroy(result);
 }
 
-void test_find_in_empty_linked_list(void) {
+void test_find_in_empty_linked_list(void)
+{
     const linked_list_t *found = linked_list_find(NULL, 1);
     TEST_ASSERT_NULL(found);
 }
 
-void test_find_in_linked_list(void) {
+void test_find_in_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_append(list, 2);
     linked_list_append(list, 3);
@@ -210,7 +224,8 @@ void test_find_in_linked_list(void) {
     linked_list_destroy(list);
 }
 
-void test_find_non_existent_element(void) {
+void test_find_non_existent_element(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_append(list, 2);
     linked_list_append(list, 3);
@@ -220,7 +235,8 @@ void test_find_non_existent_element(void) {
     linked_list_destroy(list);
 }
 
-void test_find_first_element(void) {
+void test_find_first_element(void)
+{
     linked_list_t *list = linked_list_create(10);
     linked_list_append(list, 20);
     linked_list_append(list, 30);
@@ -232,7 +248,8 @@ void test_find_first_element(void) {
     linked_list_destroy(list);
 }
 
-void test_find_last_element_in_long_list(void) {
+void test_find_last_element_in_long_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     for (int i = 2; i <= 10; i++) {
         linked_list_append(list, i);
@@ -245,7 +262,8 @@ void test_find_last_element_in_long_list(void) {
     linked_list_destroy(list);
 }
 
-void test_find_middle_element(void) {
+void test_find_middle_element(void)
+{
     linked_list_t *list = linked_list_create(5);
     linked_list_append(list, 10);
     linked_list_append(list, 15);
@@ -260,18 +278,20 @@ void test_find_middle_element(void) {
     linked_list_destroy(list);
 }
 
-
-void test_destroy_empty_linked_list(void) {
+void test_destroy_empty_linked_list(void)
+{
     linked_list_destroy(NULL);
 }
 
-void test_destroy_single_node_linked_list(void) {
+void test_destroy_single_node_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     TEST_ASSERT_NOT_NULL(list);
     linked_list_destroy(list);
 }
 
-void test_destroy_multi_node_linked_list(void) {
+void test_destroy_multi_node_linked_list(void)
+{
     linked_list_t *list = linked_list_create(1);
     linked_list_append(list, 2);
     linked_list_append(list, 3);
@@ -279,7 +299,8 @@ void test_destroy_multi_node_linked_list(void) {
     linked_list_destroy(list);
 }
 
-int main(void) {
+int main(void)
+{
     UNITY_BEGIN();
 
     // Create tests

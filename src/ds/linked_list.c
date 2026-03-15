@@ -8,14 +8,16 @@
 
 #include <stdlib.h>
 
-linked_list_t *linked_list_create(const int element) {
+linked_list_t *linked_list_create(const int element)
+{
     linked_list_t *list = malloc(sizeof(linked_list_t));
     list->data = element;
     list->next = NULL;
     return list;
 }
 
-linked_list_t *linked_list_append(linked_list_t *list, const int element) {
+linked_list_t *linked_list_append(linked_list_t *list, const int element)
+{
     if (list == NULL) {
         return NULL;
     }
@@ -31,7 +33,8 @@ linked_list_t *linked_list_append(linked_list_t *list, const int element) {
     return new_list;
 }
 
-linked_list_t *linked_list_delete(linked_list_t *list, const linked_list_t *element) {
+linked_list_t *linked_list_delete(linked_list_t *list, const linked_list_t *element)
+{
     if (list == NULL) {
         return NULL;
     }
@@ -63,7 +66,8 @@ linked_list_t *linked_list_delete(linked_list_t *list, const linked_list_t *elem
     return list;
 }
 
-linked_list_t *linked_list_find(linked_list_t *list, const int element) {
+linked_list_t *linked_list_find(linked_list_t *list, const int element)
+{
     if (list == NULL) {
         return NULL;
     }
@@ -78,7 +82,8 @@ linked_list_t *linked_list_find(linked_list_t *list, const int element) {
     return NULL;
 }
 
-void linked_list_destroy(linked_list_t *list) {
+void linked_list_destroy(linked_list_t *list)
+{
     if (list == NULL) {
         return;
     }

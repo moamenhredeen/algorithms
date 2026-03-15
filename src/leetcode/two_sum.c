@@ -1,18 +1,20 @@
-#include <stdlib.h>
 #include "leetcode.h"
+#include <stdlib.h>
 
 typedef struct {
     int value;
     int index;
 } Pair;
 
-int comparePairs(const void *a, const void *b) {
-    return ((Pair*)a)->value - ((Pair*)b)->value;
+int comparePairs(const void *a, const void *b)
+{
+    return ((Pair *)a)->value - ((Pair *)b)->value;
 }
 
-int* twoSum(const int* nums, const int numsSize, const int target, int* returnSize) {
+int *twoSum(const int *nums, const int numsSize, const int target, int *returnSize)
+{
     int *res = malloc(sizeof(int) * 2);
-    Pair* pairs = malloc(sizeof(Pair) * numsSize);
+    Pair *pairs = malloc(sizeof(Pair) * numsSize);
     for (int i = 0; i < numsSize; i++) {
         pairs[i].value = nums[i];
         pairs[i].index = i;

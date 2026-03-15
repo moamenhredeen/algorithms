@@ -1,10 +1,15 @@
-#include "unity.h"
 #include "leetcode.h"
+#include "unity.h"
 
-void setUp(void) {}
-void tearDown(void) {}
+void setUp(void)
+{
+}
+void tearDown(void)
+{
+}
 
-void test_daily_temperatures(void) {
+void test_daily_temperatures(void)
+{
     int temperatures[] = {89, 62, 70, 58, 47, 47, 46, 76, 100, 70};
     const int size = sizeof(temperatures) / sizeof(temperatures[0]);
     int returnSize;
@@ -18,7 +23,8 @@ void test_daily_temperatures(void) {
     free(res);
 }
 
-int main(void) {
+int main(void)
+{
     UNITY_BEGIN();
     RUN_TEST(test_daily_temperatures);
     return UNITY_END();

@@ -1,6 +1,7 @@
 #include "algorithms.h"
 
-void insertion_sort(int arr[], int len) {
+void insertion_sort(int arr[], int len)
+{
     int i = 0;
     int j = 0;
     int key = 0;

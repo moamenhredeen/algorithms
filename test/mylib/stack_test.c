@@ -1,10 +1,15 @@
-#include "unity.h"
 #include "stack.h"
+#include "unity.h"
 
-void setUp(void) {}
-void tearDown(void) {}
+void setUp(void)
+{
+}
+void tearDown(void)
+{
+}
 
-void test_stack_peek(void) {
+void test_stack_peek(void)
+{
     stack_t *s = stack_create(sizeof(int), 10);
     int i = 2;
     stack_push(s, &i);
@@ -17,7 +22,8 @@ void test_stack_peek(void) {
     stack_destroy(s);
 }
 
-void test_stack_not_empty_after_push(void) {
+void test_stack_not_empty_after_push(void)
+{
     stack_t *s = stack_create(sizeof(int), 10);
     int i = 2;
     stack_push(s, &i);
@@ -27,7 +33,8 @@ void test_stack_not_empty_after_push(void) {
     stack_destroy(s);
 }
 
-void test_stack_pop(void) {
+void test_stack_pop(void)
+{
     stack_t *s = stack_create(sizeof(int), 10);
     int i = 2;
     stack_push(s, &i);
@@ -41,7 +48,8 @@ void test_stack_pop(void) {
     stack_destroy(s);
 }
 
-void test_stack_empty_after_pop_all(void) {
+void test_stack_empty_after_pop_all(void)
+{
     stack_t *s = stack_create(sizeof(int), 10);
     int i = 2;
     stack_push(s, &i);
@@ -55,7 +63,8 @@ void test_stack_empty_after_pop_all(void) {
     stack_destroy(s);
 }
 
-int main(void) {
+int main(void)
+{
     UNITY_BEGIN();
     RUN_TEST(test_stack_peek);
     RUN_TEST(test_stack_not_empty_after_push);

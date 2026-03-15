@@ -1,6 +1,7 @@
 #include "leetcode.h"
 
-struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2) {
+struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
+{
     struct ListNode *res, *c;
     res = malloc(sizeof(struct ListNode));
     c = res;

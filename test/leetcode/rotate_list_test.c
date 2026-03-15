@@ -1,13 +1,16 @@
-#include "unity.h"
 #include "leetcode.h"
+#include "unity.h"
 
-void setUp(void) {
+void setUp(void)
+{
 }
 
-void tearDown(void) {
+void tearDown(void)
+{
 }
 
-void test_rotate_right(void) {
+void test_rotate_right(void)
+{
     struct ListNode n5 = {.val = 5, .next = NULL};
     struct ListNode n4 = {.val = 4, .next = &n5};
     struct ListNode n3 = {.val = 3, .next = &n4};
@@ -31,7 +34,8 @@ void test_rotate_right(void) {
     TEST_ASSERT_EQUAL_INT(3, res->val);
 }
 
-int main(void) {
+int main(void)
+{
     UNITY_BEGIN();
     // RUN_TEST(test_rotate_right);
     return UNITY_END();

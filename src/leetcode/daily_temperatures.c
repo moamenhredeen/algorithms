@@ -1,9 +1,10 @@
-#include "mylib/stack.h"
 #include "leetcode.h"
+#include "mylib/stack.h"
 
-int* daily_temperatures(const int* temperatures, int temperaturesSize, int* returnSize) {
-    int* res = malloc(sizeof(int) * temperaturesSize);
-    stack_t* stack = stack_create(sizeof(int), temperaturesSize);
+int *daily_temperatures(const int *temperatures, int temperaturesSize, int *returnSize)
+{
+    int *res = malloc(sizeof(int) * temperaturesSize);
+    stack_t *stack = stack_create(sizeof(int), temperaturesSize);
     int i, prev_i;
     for (i = 0; i < temperaturesSize; i++) {
         while (!stack_is_empty(stack)) {
@@ -21,4 +22,3 @@ int* daily_temperatures(const int* temperatures, int temperaturesSize, int* retu
     *returnSize = temperaturesSize;
     return res;
 }
-

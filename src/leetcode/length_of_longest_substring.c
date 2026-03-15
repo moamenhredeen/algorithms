@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "leetcode.h"
 #include "uthash.h"
@@ -12,7 +12,8 @@ typedef struct {
 
 item_t *seen_items = NULL;
 
-void add_item(char c, int index) {
+void add_item(char c, int index)
+{
     item_t *old_item;
     HASH_FIND(hh, seen_items, &c, sizeof(char), old_item);
 
@@ -27,16 +28,21 @@ void add_item(char c, int index) {
     }
 }
 
-int exists(char c) {
+int exists(char c)
+{
     item_t *item;
     HASH_FIND(hh, seen_items, &c, sizeof(char), item);
-    if (item) return item->index;
+    if (item)
+        return item->index;
     return -1;
 }
 
-int lengthOfLongestSubstring(char *s) {
-    if (s[0] == '\0') return 0;
-    if (s[1] == '\0') return 1;
+int lengthOfLongestSubstring(char *s)
+{
+    if (s[0] == '\0')
+        return 0;
+    if (s[1] == '\0')
+        return 1;
 
     int max = 0;
     int seen_index = -1;
@@ -54,7 +60,6 @@ int lengthOfLongestSubstring(char *s) {
     HASH_CLEAR(hh, seen_items);
     return max;
 }
-
 
 /*
 
