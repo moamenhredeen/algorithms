@@ -44,6 +44,7 @@ add_library(algorithms_lib STATIC
 add_library(ds_lib STATIC
     src/ds/linked_list.c
     src/ds/stack.c
+    src/ds/linked_stack.c
 )
 
 add_library(leetcode STATIC
