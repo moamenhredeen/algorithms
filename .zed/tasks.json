@@ -1,7 +1,7 @@
 [
   {
     "label": "reconfigure build",
-    "command": "cmake -B build -DCMAKE_BUILD_TYPE=Debug",
+    "command": "cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug",
     "use_new_terminal": false,
     "reveal": "no_focus",
   },
@@ -19,7 +19,7 @@
   },
   {
     "label": "reconfigure coverage build",
-    "command": "cmake -B build-coverage -DCMAKE_BUILD_TYPE=Coverage -DENABLE_COVERAGE=ON",
+    "command": "cmake -B build-coverage  -G Ninja -DCMAKE_BUILD_TYPE=Coverage -DENABLE_COVERAGE=ON",
     "use_new_terminal": false,
     "reveal": "no_focus",
   },
