@@ -1,6 +1,7 @@
 # Summary
 
 - [Introduction](./introduction.md)
+- [How I Program C](./how_i_program_c.md)
 
 # Data Structures
 
