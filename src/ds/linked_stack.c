@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "ds/linked_stack.h"
+#include "data_structures.h"
 
 linked_stack_t *linked_stack_create(void)
 {

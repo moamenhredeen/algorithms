@@ -1,4 +1,4 @@
-#include "ds/stack.h"
+#include "data_structures.h"
 
 #include <stdlib.h>
 #include <string.h>

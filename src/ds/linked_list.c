@@ -4,7 +4,7 @@
 
 #include <stddef.h>
 
-#include "ds/linked_list.h"
+#include "data_structures.h"
 
 #include <stdlib.h>
 

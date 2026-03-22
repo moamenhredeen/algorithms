@@ -1,4 +1,4 @@
-#include "ds/linked_queue.h"
+#include "data_structures.h"
 #include <stdlib.h>
 
 linked_queue_t *linked_queue_create(void)

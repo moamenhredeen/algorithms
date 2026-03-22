@@ -1,4 +1,4 @@
-#include "ds/linked_queue.h"
+#include "data_structures.h"
 #include "unity.h"
 #include "unity_internals.h"
 #include <stdlib.h>
