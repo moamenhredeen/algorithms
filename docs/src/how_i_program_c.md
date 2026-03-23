@@ -941,3 +941,272 @@ the idea: allocate one big block up front, hand out pieces of it by bumping a po
 
 this is how many game engines, compilers, and web servers manage memory for request-scoped or frame-scoped work.
 
+### What Actually Happens When You Access Memory
+
+so far we have talked about memory from the program's perspective: stack, heap, malloc, free. but there is a deeper layer. your program does not touch physical RAM directly — there is hardware and an entire operating system between you and the actual bytes. understanding this layer changes how you think about every data structure and every allocation strategy.
+
+#### memory is virtualized
+
+every process gets its own virtual address space. when your code dereferences a pointer, the address is not a physical location in RAM — it is a virtual address. the CPU's memory management unit (MMU) translates it to a physical address on every single access, using a **page table** managed by the OS.
+
+the virtual address space is divided into **pages** (typically 4 KB on x86). physical memory is divided into **frames** of the same size. the page table maps each virtual page to a physical frame:
+
+```
+  virtual address space                physical memory
+  ┌──────────────┐                   ┌──────────────┐
+  │   page 0     │ ─────────────────▶│   frame 7    │
+  ├──────────────┤                   ├──────────────┤
+  │   page 1     │ ──────────┐      │   frame 1    │
+  ├──────────────┤           │      ├──────────────┤
+  │   page 2     │ ───┐      │      │   frame 4    │
+  ├──────────────┤    │      │      ├──────────────┤
+  │   page 3     │    │      └─────▶│   frame 3    │
+  ├──────────────┤    │              ├──────────────┤
+  │     ...      │    └────────────▶│   frame 9    │
+  └──────────────┘                   └──────────────┘
+```
+
+the important thing: pages do not need to be contiguous in physical memory. the OS can scatter them across physical frames and the program never knows — it sees a flat, contiguous address space. this virtualization has consequences we will come back to.
+
+#### but memory access is slow
+
+the translation from virtual to physical is not the bottleneck — the MMU handles that in hardware with a TLB (translation lookaside buffer) cache. the real problem is what happens after translation: actually reading the bytes from RAM.
+
+modern CPUs do not read from main memory directly. they read from a hierarchy of caches, each one smaller and faster than the one below it:
+
+```
+  ┌────────────────────────────────────┐
+  │           registers                │  ~0 cycles      (~0.3 ns)
+  │           (few KB)                 │
+  ├────────────────────────────────────┤
+  │          L1 cache                  │  ~3-4 cycles    (~1 ns)
+  │       (32-64 KB per core)          │
+  ├────────────────────────────────────┤
+  │          L2 cache                  │  ~7-14 cycles   (~3-5 ns)
+  │       (256 KB - 1 MB per core)     │
+  ├────────────────────────────────────┤
+  │          L3 cache                  │  ~30-50 cycles  (~10-20 ns)
+  │       (8-64 MB shared)             │
+  ├────────────────────────────────────┤
+  │        main memory (DRAM)          │  ~100-300 cycles (~50-100 ns)
+  │        (8-128 GB)                  │
+  ├────────────────────────────────────┤
+  │         SSD / disk                 │  ~10,000 - 10,000,000 cycles
+  │         (TB)                       │
+  └────────────────────────────────────┘
+```
+
+the gap between L1 cache and main memory is roughly **100×**. that is not a small difference — it is the difference between a function running at full speed and one that stalls on every memory access.
+
+to put it in perspective: an integer addition takes about 1 cycle. a floating-point multiply takes about 3-5 cycles. an L1 cache hit takes 3-4 cycles. a main memory access takes 100+ cycles. **math is effectively free compared to a cache miss.** when you are optimizing a program, you are almost always optimizing for memory access patterns — not for fewer instructions.
+
+> The purpose of all programs, and all parts of those programs, is to transform data from one form to
+> another. If you don't understand the data, you don't understand the problem.
+>
+> There is no loaded gun loaded more loaded than a loaded cache miss.
+>
+> — Mike Acton, "Data-Oriented Design and C++", CppCon 2014
+
+#### cache lines: the unit of transfer
+
+when the CPU reads an address, it does not fetch just the bytes you asked for. it fetches an entire **cache line** — typically 64 bytes on x86. this line is stored in L1, and the next access to any byte within that line is a cache hit:
+
+```
+  memory:
+  ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
+  │ a0 │ a1 │ a2 │ a3 │ a4 │ a5 │ a6 │ a7 │ a8 │ a9 │ a10│ a11│ a12│ a13│ a14│ a15│
+  └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
+  ◄────────────────────── 64-byte cache line ──────────────────────►
+
+  you access a0 → the CPU loads a0 through a15 into L1 cache
+  you access a1 → cache hit (already in L1)
+  you access a2 → cache hit
+  ...
+  you access a15 → cache hit
+  you access a16 → cache miss, new cache line loaded
+```
+
+this means **sequential access patterns are fast** — each cache miss loads 64 bytes of useful data. random access patterns are slow — each access loads 64 bytes but you only use a few before jumping elsewhere.
+
+the CPU also has a **hardware prefetcher** that detects sequential access patterns and starts loading the next cache lines before you even ask for them. by the time your loop reaches the next cache line, it is already in L1. this makes sequential iteration over contiguous data even faster in practice than the raw latency numbers suggest.
+
+all of this — the cache hierarchy, cache lines, the prefetcher — has a direct consequence for how you should choose and organize your data structures.
+
+#### data locality: why arrays beat linked lists
+
+consider two ways to store a collection of integers: a contiguous array and a linked list.
+
+**arrays** lay elements next to each other in memory:
+
+```c
+int *arr = malloc(n * sizeof *arr);
+for (int i = 0; i < n; i++) {
+    arr[i] = i;
+}
+
+int sum = 0;
+for (int i = 0; i < n; i++) {
+    sum += arr[i];
+}
+```
+
+```
+  cache line 0                        cache line 1
+  ┌───┬───┬───┬───┬───┬───┬───┬───┐  ┌───┬───┬───┬───┬───┬───┬───┬───┐
+  │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │  │ 8 │ 9 │10 │11 │12 │13 │14 │15 │  ...
+  └───┴───┴───┴───┴───┴───┴───┴───┘  └───┴───┴───┴───┴───┴───┴───┴───┘
+       (16 ints per 64-byte cache line, assuming 4-byte int)
+```
+
+reading `arr[0]` loads the first cache line: elements 0 through 15 are now in L1. the next 15 accesses are all hits. the prefetcher runs ahead loading future cache lines. for N elements, you get roughly N / 16 cache misses, and the prefetcher hides most of that latency.
+
+**linked lists** scatter nodes across the heap:
+
+```c
+typedef struct Node {
+    int          data;
+    struct Node *next;
+} node_t;
+
+int sum = 0;
+for (node_t *n = head; n != NULL; n = n->next) {
+    sum += n->data;
+}
+```
+
+```
+  heap memory:
+
+  addr 0x100           addr 0x500           addr 0x230
+  ┌────────────┐       ┌────────────┐       ┌────────────┐
+  │ data: 0    │       │ data: 1    │       │ data: 2    │
+  │ next: 0x500│──────▶│ next: 0x230│──────▶│ next: ...  │──▶ ...
+  └────────────┘       └────────────┘       └────────────┘
+
+  cache line at 0x0C0          cache line at 0x4C0          cache line at 0x200
+  ┌──────────────────────┐     ┌──────────────────────┐     ┌──────────────────────┐
+  │ node A + 48B wasted  │     │ node B + 48B wasted  │     │ node C + 48B wasted  │
+  └──────────────────────┘     └──────────────────────┘     └──────────────────────┘
+```
+
+each `node_t` is 16 bytes (4 bytes data + 4 bytes padding + 8 bytes pointer on 64-bit). but each access loads a 64-byte cache line — you use 16 bytes and waste 48. every `n = n->next` is a **pointer chase** into a random memory location, which is almost always a cache miss. the prefetcher cannot help because it cannot predict where `next` points — the pattern looks random from the hardware's perspective.
+
+the numbers tell the story. for iterating over 1,000,000 integers:
+
+```
+  array (sequential access):
+      cache misses:   1,000,000 / 16 = 62,500
+      effective cost:  62,500 × ~5 cycles (prefetcher hides most latency)
+                     ≈ 312,500 cycles
+
+  linked list (pointer chasing):
+      cache misses:   ~1,000,000 (each node likely on a different cache line)
+      effective cost:  1,000,000 × ~100 cycles
+                     ≈ 100,000,000 cycles
+
+  ratio: the linked list is roughly 300× slower for pure iteration
+```
+
+these are approximate, but the order of magnitude is real. Bjarne Stroustrup demonstrated this empirically in [*"Why you should avoid Linked Lists"*](https://www.youtube.com/watch?v=YQs6IC-vgmo) — even for insertion in the middle, a dynamic array with `memmove` beats a linked list for sizes up to tens of thousands of elements. the reason is counterintuitive: shifting contiguous data in cache is cheap because it is a sequential operation that the prefetcher handles well, while walking a linked list to find the insertion point requires random memory accesses that stall the CPU:
+
+```c
+// shifting thousands of elements in a contiguous array — a streaming
+// sequential operation that the prefetcher handles efficiently
+memmove(&arr[pos + 1], &arr[pos], (count - pos) * sizeof *arr);
+arr[pos] = value;
+```
+
+#### realloc revisited
+
+now we can circle back to `realloc` with a better understanding. people avoid dynamic arrays because they fear that growing them with `realloc` is expensive. but remember: memory is virtualized.
+
+for large allocations backed by `mmap`, the OS can use `mremap()` (on Linux) to grow the allocation by remapping virtual pages — no data is copied at all. the kernel just updates the page table:
+
+```
+  before realloc (4 pages):
+
+  virtual                physical
+  ┌──────────┐         ┌──────────┐
+  │  page 0  │ ───────▶│ frame 12 │
+  ├──────────┤         ├──────────┤
+  │  page 1  │ ───────▶│ frame 13 │
+  ├──────────┤         ├──────────┤
+  │  page 2  │ ───────▶│ frame 14 │
+  ├──────────┤         ├──────────┤
+  │  page 3  │ ───────▶│ frame 15 │
+  └──────────┘         └──────────┘
+
+  after realloc to 8 pages (via mremap):
+
+  virtual                physical
+  ┌──────────┐         ┌──────────┐
+  │  page 0  │ ───────▶│ frame 12 │  ← same data, no copy
+  ├──────────┤         ├──────────┤
+  │  page 1  │ ───────▶│ frame 13 │  ← same data, no copy
+  ├──────────┤         ├──────────┤
+  │  page 2  │ ───────▶│ frame 14 │  ← same data, no copy
+  ├──────────┤         ├──────────┤
+  │  page 3  │ ───────▶│ frame 15 │  ← same data, no copy
+  ├──────────┤         ├──────────┤
+  │  page 4  │ ───────▶│ frame 20 │  ← new page
+  ├──────────┤         ├──────────┤
+  │  page 5  │ ───────▶│ frame 21 │  ← new page
+  ├──────────┤         ├──────────┤
+  │  page 6  │ ───────▶│ frame 22 │  ← new page
+  ├──────────┤         ├──────────┤
+  │  page 7  │ ───────▶│ frame 23 │  ← new page
+  └──────────┘         └──────────┘
+```
+
+no bytes were copied. the OS just assigned new physical frames to the new virtual pages and updated the page table. this is an O(1) operation regardless of how much data you have. even for smaller allocations, `realloc` can often extend the block in place if there is free space adjacent to it.
+
+with geometric growth (doubling the capacity), `realloc` is called only O(log N) times for N insertions, and the amortized cost per element is O(1). this makes the dynamic array the best default collection: cheap to grow, cache-friendly to iterate, and simple to reason about.
+
+```c
+typedef struct {
+    int    *data;
+    size_t  count;
+    size_t  capacity;
+} int_array_t;
+
+int_array_t int_array_create(size_t initial_capacity) {
+    int_array_t arr = {0};
+    arr.data     = malloc(initial_capacity * sizeof *arr.data);
+    arr.capacity = initial_capacity;
+    return arr;
+}
+
+int int_array_push(int_array_t *arr, int value) {
+    if (arr->count >= arr->capacity) {
+        size_t new_cap = arr->capacity * 2;
+        void *tmp = realloc(arr->data, new_cap * sizeof *arr->data);
+        if (!tmp) return -1;
+        arr->data     = tmp;
+        arr->capacity = new_cap;
+    }
+    arr->data[arr->count++] = value;
+    return 0;
+}
+
+void int_array_destroy(int_array_t *arr) {
+    free(arr->data);
+}
+```
+
+#### when linked lists actually make sense
+
+linked lists are not useless. they have legitimate use cases:
+
+- **O(1) splice at a known position**: if you already have a pointer to a node and need to insert or remove next to it, a linked list does this without moving any other data. this matters for LRU caches, free lists inside allocators, and scheduler queues
+- **intrusive lists**: the Linux kernel's `struct list_head` pattern embeds the list node inside the data struct itself. no separate allocation per node, and a node can live on multiple lists simultaneously
+- **you never iterate the whole list**: if you only access the head or tail (a queue, a stack), the sequential access argument is weaker
+
+but if your primary operation is "iterate over all elements" or "access by index," use an array. always.
+
+#### references
+
+- Ulrich Drepper, [*What Every Programmer Should Know About Memory*](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf) (2007) — the definitive reference on memory hierarchy, caches, and writing cache-friendly code
+- Mike Acton, [*Data-Oriented Design and C++*](https://www.youtube.com/watch?v=rX0ItVEVjHc), CppCon 2014 — the talk that made a generation of C++ programmers think about cache lines
+- Bjarne Stroustrup, [*Why you should avoid Linked Lists*](https://www.youtube.com/watch?v=YQs6IC-vgmo) — empirical demonstration that vector beats list even for insertion-heavy workloads
+- Chandler Carruth, [*Efficiency with Algorithms, Performance with Data Structures*](https://www.youtube.com/watch?v=fHNmRkzxHWs), CppCon 2014 — practical guidance on choosing data structures for cache performance
+- [Intel 64 and IA-32 Architectures Optimization Reference Manual](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) — hardware-level details on cache hierarchy and prefetching
