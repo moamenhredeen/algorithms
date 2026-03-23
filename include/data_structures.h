@@ -9,15 +9,7 @@
 
 /* ------------------------------------- Stack ------------------------------------- */
 
-/**
- * static-sized stack
- */
-typedef struct Stack {
-    void *data;
-    int top;
-    int capacity;
-    size_t element_size;
-} stack_t;
+typedef struct Stack stack_t;
 
 stack_t *stack_create(size_t element_size, int capacity);
 void stack_destroy(stack_t *s);
@@ -79,5 +71,14 @@ void linked_stack_destroy(linked_stack_t *s);
 void linked_stack_push(linked_stack_t *s, const int element);
 int linked_stack_pop(linked_stack_t *s);
 int linked_stack_peek(const linked_stack_t *s);
+
+/* ------------------------------------- Binary Tree ------------------------------------- */
+
+typedef struct BinaryTree binary_tree_t;
+
+binary_tree_t *binary_tree_create(int item);
+binary_tree_t *binary_tree_search(binary_tree_t *tree, int item);
+int *get_item(binary_tree_t *tree);
+void binary_tree_destroy(binary_tree_t *tree);
 
 #endif // DATA_STRUCTURES_H

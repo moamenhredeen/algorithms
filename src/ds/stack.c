@@ -3,6 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct Stack {
+    void *data;
+    int top;
+    int capacity;
+    size_t element_size;
+};
+
 stack_t *stack_create(const size_t element_size, const int capacity)
 {
     stack_t *s = malloc(sizeof(stack_t));

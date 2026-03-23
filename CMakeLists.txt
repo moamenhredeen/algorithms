@@ -46,6 +46,7 @@ add_library(ds_lib STATIC
     src/ds/stack.c
     src/ds/linked_stack.c
     src/ds/linked_queue.c
+    src/ds/binary_tree.c
 )
 
 add_library(leetcode STATIC
