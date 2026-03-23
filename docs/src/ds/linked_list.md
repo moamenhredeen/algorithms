@@ -5,7 +5,7 @@ A singly linked list where each node holds an integer and a pointer to the next 
 ## Interface
 
 ```c
-{{#include ../../../include/ds/linked_list.h}}
+{{#include ../../../include/data_structures.h:74:108}}
 ```
 
 ## Implementation

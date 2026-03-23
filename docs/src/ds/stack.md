@@ -5,7 +5,7 @@ An array-based stack that stores elements of any type using a fixed-capacity buf
 ## Interface
 
 ```c
-{{#include ../../../include/ds/stack.h}}
+{{#include ../../../include/data_structures.h:23:70}}
 ```
 
 ## Implementation

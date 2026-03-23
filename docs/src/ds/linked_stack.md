@@ -5,7 +5,7 @@ A stack implemented using a singly linked list with no fixed capacity.
 ## Interface
 
 ```c
-{{#include ../../../include/ds/linked_stack.h}}
+{{#include ../../../include/data_structures.h:152:188}}
 ```
 
 ## Implementation
