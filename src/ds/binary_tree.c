@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -21,6 +22,17 @@ binary_tree_t *binary_tree_create(int item)
     return tree;
 }
 
+void binary_tree_destroy(binary_tree_t *tree)
+{
+    if (tree == NULL)
+        return;
+    if (tree->left != NULL)
+        binary_tree_destroy(tree->left);
+    if (tree->right != NULL)
+        binary_tree_destroy(tree->right);
+    free(tree);
+}
+
 binary_tree_t *binary_tree_search(binary_tree_t *tree, int item)
 {
     if (tree == NULL) {
@@ -35,13 +47,42 @@ binary_tree_t *binary_tree_search(binary_tree_t *tree, int item)
         return binary_tree_search(tree->left, item);
 }
 
-void binary_tree_destroy(binary_tree_t *tree)
+binary_tree_t *binary_tree_find_minimum(binary_tree_t *tree)
 {
     if (tree == NULL)
-        return;
-    if (tree->left != NULL)
-        binary_tree_destroy(tree->left);
-    if (tree->right != NULL)
-        binary_tree_destroy(tree->right);
-    free(tree);
+        return NULL;
+
+    binary_tree_t *current = tree;
+    while (current->left != NULL) {
+        current = current->left;
+    }
+    return current;
+}
+
+binary_tree_t *binary_tree_find_maximum(binary_tree_t *tree)
+{
+    if (tree == NULL)
+        return NULL;
+
+    binary_tree_t *current = tree;
+    while (current->right != NULL) {
+        current = current->right;
+    }
+    return current;
+}
+
+void binary_tree_traverse(binary_tree_t *tree, void (*func)(binary_tree_t *node, void *user_data),
+                          void *user_data)
+{
+    if (tree != NULL) {
+        binary_tree_traverse(tree->left, func, user_data);
+        func(tree, user_data);
+        binary_tree_traverse(tree->right, func, user_data);
+    }
+}
+
+int get_item(binary_tree_t *tree)
+{
+    assert(tree != NULL);
+    return tree->item;
 }
